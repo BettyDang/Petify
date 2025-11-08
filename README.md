@@ -145,7 +145,3 @@ Petify/
 
 **Developed by:** Negar Pirasteh - Betty Dang
 **College:** LaSalle College, Montréal
-**Purpose:** Android Final Project - Multi-role Firebase e-commerce system
-
-Would you like me to now make a **`README.md` file** ready for you to upload (with correct Markdown formatting and placeholder image paths like `/screenshots/login.png`)?
-That way you can directly add it to your GitHub repo without formatting issues.
