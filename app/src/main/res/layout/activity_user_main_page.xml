@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#00BCD4"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="40dp">
+
+        <TextView
+            android:id="@+id/tvStoreName"
+            android:layout_width="311dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Pet Shop"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ImgProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_myplaces"
+            android:onClick="onImageClick"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editSearch"
+            android:layout_width="363dp"
+            android:layout_height="wrap_content"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:hint="Search"
+            android:textSize="16dp" />
+
+
+        <ImageView
+            android:id="@+id/ImgCart"
+            android:layout_width="47dp"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/ic_menu_camera"
+
+            />
+
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Food"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#00BCD4"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/btnToy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Toy"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#00BCD4"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/btnGrooming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grooming"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#00BCD4"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/btn_litter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#00BCD4"
+                android:text="Litter"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btn_health"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Health"
+                android:backgroundTint="#00BCD4"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:nestedScrollingEnabled="false"
+        tools:listitem="@layout/user_item_product"/>
+
+
+</LinearLayout>

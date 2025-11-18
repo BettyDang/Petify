@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="30dp"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:textSize="28dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:paddingBottom="20dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:text="First Name:" />
+
+    <EditText
+        android:id="@+id/editFn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16dp"
+        android:hint="Enter first name"
+        android:background="#ffffff"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:text="Last Name:" />
+
+    <EditText
+        android:id="@+id/editLn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16dp"
+        android:hint="Enter last name"
+        android:background="#ffffff"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:text="Email:" />
+
+    <EditText
+        android:id="@+id/editEmail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16dp"
+        android:hint="Enter email"
+        android:background="#ffffff"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:text="Adress:" />
+
+    <EditText
+        android:id="@+id/editAddress"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16dp"
+        android:hint="Enter Address"
+        android:background="#ffffff"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:text="Postal Code:" />
+
+    <EditText
+        android:id="@+id/editPostalCode"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16dp"
+        android:hint="Enter postal code"
+        android:background="#ffffff"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#555555"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:text="City:" />
+
+    <EditText
+        android:id="@+id/editCity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16dp"
+        android:hint="Enter city"
+        android:background="#ffffff"/>
+
+    <Button
+        android:id="@+id/btnSaveProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Changes"
+        android:backgroundTint="#007aff"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/btnBackToProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back To Profile"
+        android:backgroundTint="#009D0D"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="20dp"/>
+
+
+</LinearLayout>

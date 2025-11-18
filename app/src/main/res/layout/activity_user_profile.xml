@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+
+    <TextView
+        android:id="@+id/tvProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="Profile"
+        android:textColor="#1A237E"
+        android:textSize="28dp"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btnAccount"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:padding="20dp"
+        android:textSize="18dp"
+        android:backgroundTint="#FF9800"
+        app:cornerRadius="12dp"
+        app:icon="@android:drawable/ic_menu_edit"
+        app:iconTint="@android:color/white"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnChangePassword"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Change Password"
+        android:padding="20dp"
+        android:textSize="18dp"
+        android:backgroundTint="#FF0000"
+        app:cornerRadius="12dp"
+        app:icon="@android:drawable/ic_lock_lock"
+        app:iconTint="@android:color/white"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnOrders"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Order History"
+        android:padding="20dp"
+        android:textSize="18dp"
+        android:backgroundTint="#8BC34A"
+        app:cornerRadius="12dp"
+        app:icon="@android:drawable/ic_dialog_info"
+        app:iconTint="@android:color/white"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnPayments"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Payment History"
+        android:padding="20dp"
+        android:textSize="18dp"
+        android:backgroundTint="#FF5722"
+        app:cornerRadius="12dp"
+        app:icon="@android:drawable/ic_menu_agenda"
+        app:iconTint="@android:color/white"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnBacktoMainPage"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Home Page"
+        android:padding="20dp"
+        android:textSize="18dp"
+        android:backgroundTint="#0353F4"
+        app:cornerRadius="12dp"
+        app:icon="@android:drawable/ic_menu_revert"
+        app:iconTint="@android:color/white"
+        android:layout_marginBottom="10dp"/>
+
+
+</LinearLayout>
