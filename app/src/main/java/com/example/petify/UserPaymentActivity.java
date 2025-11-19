@@ -30,8 +30,8 @@ import java.util.Map;
 
 public class UserPaymentActivity extends AppCompatActivity{
     private Button payment;
-    private String PublishableKey = "pk_test_51STQgp2W9zfqNI952nuQgs3c3nNvWDkUfxwCTLxOfg1Z2WBmGlauTz4quDxTPTsFzJo7rQZiw20j0oyMzXrGOXsx003APC8gaS";
-    private String SecretKey = "sk_test_51STQgp2W9zfqNI953NlPwqWs9AhpuMksXSzaNAqMlmeJHiF4Xgs3Gp1GGyL7zMUDGvnEh116GxI6leVM6I1hMkTW00G0DV7fa0";
+    private String PublishableKey = "";
+    private String SecretKey = "";
 
     private String CustomersURL = "https://api.stripe.com/v1/customers";
     private String EphericalKeyURL = "https://api.stripe.com/v1/ephemeral_keys";
