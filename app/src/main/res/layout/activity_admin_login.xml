@@ -1,10 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#F6F7FB"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-
-
-
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
@@ -12,50 +10,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="400px">
+        android:layout_marginTop="150dp">
 
         <!-- Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-
-            android:gravity="center">
-
-            <TextView
-                android:text="Login"
-                android:textColor="#020202"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+        <TextView
+            android:text="Admin Login"
+            android:textColor="#3F51B5"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"/>
 
         <!-- Form -->
         <LinearLayout
             android:orientation="vertical"
             android:padding="16dp"
-            android:layout_marginTop="16dp"
             android:background="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="Email"
+                android:text="Admin Email"
                 android:textColor="#666666"
                 android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <EditText
-                android:id="@+id/etEmail"
-                android:hint="Enter your email"
+                android:id="@+id/etAdminEmail"
+                android:hint="Enter admin email"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:background="#EFEFF4"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"/>
 
-            <View android:layout_height="12dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
 
             <TextView
                 android:text="Password"
@@ -65,55 +58,31 @@
                 android:layout_height="wrap_content"/>
 
             <EditText
-                android:id="@+id/etPassword"
-                android:hint="Enter your password"
+                android:id="@+id/etAdminPassword"
+                android:hint="Enter admin password"
                 android:inputType="textPassword"
                 android:padding="12dp"
                 android:background="#EFEFF4"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"/>
-
-            <View android:layout_height="12dp"/>
-
-            <TextView
-                android:text="Select Role"
-                android:textColor="#666666"
-                android:textSize="14sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <RadioGroup
-                android:id="@+id/rgRole"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <RadioButton
-                    android:id="@+id/rbUser"
-                    android:text="User"
-                    android:checked="true"/>
-                <RadioButton
-                    android:id="@+id/rbAdmin"
-                    android:text="Admin"
-                    android:layout_marginStart="16dp"/>
-            </RadioGroup>
         </LinearLayout>
 
-        <!-- Button -->
+        <!-- Login Button -->
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnAdminLogin"
             android:text="Login"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="#3F51B5"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"/>
 
         <!-- Bottom link -->
         <TextView
-            android:id="@+id/tvGoSignup"
+            android:id="@+id/tvAdminGoSignup"
             android:text="Don't have an account? Sign up"
-            android:textColor="#5B6CFF"
+            android:textColor="#0000B0"
             android:textSize="14sp"
             android:gravity="center"
             android:layout_marginTop="10dp"

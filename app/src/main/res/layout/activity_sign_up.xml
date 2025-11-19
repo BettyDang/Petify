@@ -19,7 +19,7 @@
 
             <TextView
                 android:text="Create Account"
-                android:textColor="#0F0E0E"
+                android:textColor="#2196F3"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
             android:text="Create Account"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#5B6CFF"
+            android:backgroundTint="#2196F3"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"/>
@@ -152,7 +152,7 @@
         <TextView
             android:id="@+id/tvGoLogin"
             android:text="Already have an account? Log in"
-            android:textColor="#5B6CFF"
+            android:textColor="#2196F3"
             android:textSize="14sp"
             android:gravity="center"
             android:layout_marginTop="10dp"

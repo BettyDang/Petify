@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="12dp"
+    android:layout_marginBottom="10dp">
+
+    <!-- Payment ID -->
+    <TextView
+        android:id="@+id/tvPaymentId"
+        android:text="Payment #987654"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#111111"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Payer name + amount -->
+    <TextView
+        android:id="@+id/tvPaymentMeta"
+        android:text="John Doe • $45.90"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Payment method -->
+    <TextView
+        android:id="@+id/tvPaymentMethod"
+        android:text="Method: Credit Card"
+        android:textSize="14sp"
+        android:textColor="#444444"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Payment Status -->
+    <TextView
+        android:id="@+id/tvPaymentStatus"
+        android:text="Status: Completed"
+        android:textSize="14sp"
+        android:textColor="#5B6CFF"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+
+</LinearLayout>
