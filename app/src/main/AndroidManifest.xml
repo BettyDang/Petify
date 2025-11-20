@@ -40,13 +40,13 @@
             android:exported="false" />
 
 
-<!--        <activity-->
-<!--            android:name=".AdminOrdersActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".AdminOrdersActivity"
+            android:exported="false" />
 
-<!--        <activity-->
-<!--            android:name=".AdminPaymentsActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".AdminPaymentsActivity"
+            android:exported="false" />
 
         <!-- USER -->
         <activity

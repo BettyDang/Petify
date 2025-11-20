@@ -13,7 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private Button btnAccount, btnChangePassword, btnOrders, btnPayments,
+    private Button btnAccount, btnChangePassword, btnOrders,
             btnBacktoMainPage, btnShoppingCart, btnLogout;
     private TextView tvUserName;
 
@@ -26,10 +26,9 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
 
         tvUserName = findViewById(R.id.tvUserName);
-//        btnAccount = findViewById(R.id.btnAccount);
+        btnAccount = findViewById(R.id.btnAccount);
         btnChangePassword = findViewById(R.id.btnChangePassword);
         btnOrders = findViewById(R.id.btnOrders);
-        btnPayments = findViewById(R.id.btnPayments);
         btnBacktoMainPage = findViewById(R.id.btnBacktoMainPage);
         btnShoppingCart = findViewById(R.id.btnShoppingCart);
         btnLogout = findViewById(R.id.btnLogout);
@@ -39,8 +38,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         loadUserName();
 
-//        btnAccount.setOnClickListener(v ->
-//                startActivity(new Intent(this, EditProfileActivity.class)));
+        btnAccount.setOnClickListener(v ->
+                startActivity(new Intent(this, EditProfileActivity.class)));
 
         btnChangePassword.setOnClickListener(v ->
                 startActivity(new Intent(this, UserChangePasswordActivity.class)));
@@ -52,8 +51,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnOrders.setOnClickListener(v ->
                 Toast.makeText(this, "Order history not implemented yet", Toast.LENGTH_SHORT).show());
 
-        btnPayments.setOnClickListener(v ->
-                Toast.makeText(this, "Payment history not implemented yet", Toast.LENGTH_SHORT).show());
+
 
         btnBacktoMainPage.setOnClickListener(v ->
                 startActivity(new Intent(this, UserHomePageActivity.class)));

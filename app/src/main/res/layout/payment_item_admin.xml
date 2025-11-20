@@ -17,35 +17,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <!-- Payer name + amount -->
     <TextView
         android:id="@+id/tvPaymentMeta"
-        android:text="John Doe • $45.90"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:layout_marginTop="2dp"
+        android:text="John Doe • john@gmail.com"
+        android:textSize="15sp"
+        android:textColor="#222222"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <!-- Payment method -->
     <TextView
-        android:id="@+id/tvPaymentMethod"
-        android:text="Method: Credit Card"
+        android:id="@+id/tvPaymentAmount"
+        android:text="Amount: $45.90"
         android:textSize="14sp"
         android:textColor="#444444"
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <!-- Payment Status -->
+    <TextView
+        android:id="@+id/tvPaymentMethod"
+        android:text="Method: Stripe"
+        android:textSize="14dp"
+        android:textColor="#555555"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:id="@+id/tvPaymentStatus"
         android:text="Status: Completed"
         android:textSize="14sp"
         android:textColor="#5B6CFF"
-        android:layout_marginTop="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
 
     <View
         android:layout_width="match_parent"

@@ -47,6 +47,30 @@
         android:padding="20dp"
         android:layout_marginTop="24dp">
 
+        <!-- Address label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shipping address"
+            android:textSize="14sp"
+            android:textColor="#444444"
+            android:layout_marginBottom="4dp" />
+
+
+        <!-- Address input -->
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Street, city, postal code"
+            android:background="#EFEFF4"
+            android:padding="10dp"
+            android:minLines="2"
+            android:maxLines="3"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="16dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
