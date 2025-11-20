@@ -1,6 +1,8 @@
 package com.example.petify;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,89 +14,92 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
-    private List<Product> productList;
-    private static OnItemInteractionListener listener;
+    public interface OnCartActionListener {
+        void onIncreaseQuantity(CartItem item);
+        void onDecreaseQuantity(CartItem item);
+    }
 
-    public CartAdapter(List<Product> productList, OnItemInteractionListener listener){
-        this.productList = productList;
+    private final Context context;
+    private final List<CartItem> items;
+    private final OnCartActionListener listener;
+
+    public CartAdapter(Context context, List<CartItem> items, OnCartActionListener listener) {
+        this.context = context;
+        this.items = items;
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item_product, parent, false);
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.user_item_cart, parent, false);
         return new CartViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CartAdapter.CartViewHolder holder, int position) {
-        Product product = productList.get(position);
-        holder.bind(product, position);
+    public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
+        CartItem item = items.get(position);
 
+        holder.tvItemName.setText(item.getTitle());
+        holder.tvPrice.setText("Price: $" + item.getPrice());
+        holder.etQuantity.setText(String.valueOf(item.getQuantity()));
+
+        String url = item.getImageUrl();
+
+        if (url != null && !url.isEmpty()) {
+            holder.imgProductImage.setImageResource(android.R.color.darker_gray);
+
+            new Thread(() -> {
+                try {
+                    InputStream in = new URL(url).openStream();
+                    Bitmap bmp = BitmapFactory.decodeStream(in);
+                    holder.imgProductImage.post(() -> holder.imgProductImage.setImageBitmap(bmp));
+                } catch (Exception e) {
+                    holder.imgProductImage.post(() ->
+                            holder.imgProductImage.setImageResource(android.R.color.darker_gray));
+                }
+            }).start();
+        } else {
+            // If imageUrl is null/missing we show the default icon
+            holder.imgProductImage.setImageResource(android.R.drawable.gallery_thumb);
+        }
+
+        holder.btnAdd.setOnClickListener(v -> {
+            if (listener != null) listener.onIncreaseQuantity(item);
+        });
+
+        holder.btnMinus.setOnClickListener(v -> {
+            if (listener != null) listener.onDecreaseQuantity(item);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        return items != null ? items.size() : 0;
     }
 
-    public class CartViewHolder extends RecyclerView.ViewHolder {
+    public static class CartViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgProductImage;
         TextView tvItemName, tvPrice;
-        ImageView ivProductImage;
-        Button btnAdd, btnMinus;
+        Button btnMinus, btnAdd;
         EditText etQuantity;
 
-        public CartViewHolder(View itemView) {
+        public CartViewHolder(@NonNull View itemView) {
             super(itemView);
+            imgProductImage = itemView.findViewById(R.id.ImgProductImage);
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-            ivProductImage = itemView.findViewById(R.id.ImgProductImage);
-            btnAdd = itemView.findViewById(R.id.btnAdd);
             btnMinus = itemView.findViewById(R.id.btnMinus);
+            btnAdd = itemView.findViewById(R.id.btnAdd);
             etQuantity = itemView.findViewById(R.id.etQuantity);
+            etQuantity.setKeyListener(null);
         }
-        @SuppressLint("NotifyDataSetChanged")
-        public void bind(Product product, int position) {
-            tvItemName.setText(product.getId());
-            tvPrice.setText((int) product.getPrice());
-
-            btnAdd.setOnClickListener(v -> {
-                try {
-                    int quantity = Integer.parseInt(etQuantity.getText().toString());
-                    quantity++;
-                    etQuantity.setText(String.valueOf(quantity));
-
-                    listener.onQuantityChanged();
-                } catch (NumberFormatException e) {
-                    etQuantity.setText("1");
-                }
-            });
-            btnMinus.setOnClickListener(v -> {
-                try {
-                    int quantity = Integer.parseInt(etQuantity.getText().toString());
-                    if (quantity > 1) {
-                        quantity--;
-                        etQuantity.setText(String.valueOf(quantity));
-                    } else if (quantity == 1) {
-                        quantity = 0;
-                        etQuantity.setText(String.valueOf(quantity));
-                    }
-
-                    listener.onQuantityChanged();
-                } catch (NumberFormatException e) {
-                    etQuantity.setText("1");
-                }
-            });
-        }
-    }
-
-    public interface OnItemInteractionListener {
-        void onItemRemoved(int position);
-        void onQuantityChanged();
     }
 }

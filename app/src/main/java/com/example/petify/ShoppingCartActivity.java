@@ -1,84 +1,156 @@
 package com.example.petify;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingCartActivity extends AppCompatActivity implements CartAdapter.OnItemInteractionListener {
+public class ShoppingCartActivity extends AppCompatActivity implements CartAdapter.OnCartActionListener {
 
     private RecyclerView recyclerView;
-    private CartAdapter adapter;
-    private List<Product> productList;
     private TextView cartTotal;
+    private Button btnContinueShopping, btnPayment;
+
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
+
+    private List<CartItem> cartItems = new ArrayList<>();
+    private CartAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
+        auth = FirebaseUtils.getAuth();
+        db = FirebaseUtils.getFirestore();
+
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         cartTotal = findViewById(R.id.cart_total);
+        btnContinueShopping = findViewById(R.id.btnContinueShopping);
+        btnPayment = findViewById(R.id.payment);
 
-        productList = new ArrayList<>();
-//        productList.add(new Product("Cat Mouse", "$19.99", R.drawable.ic_launcher_foreground));
-//        productList.add(new Product("Cat Bed", "$59.99", R.drawable.ic_launcher_foreground));
-
-        adapter = new CartAdapter(productList, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CartAdapter(this, cartItems, this);
         recyclerView.setAdapter(adapter);
 
-        calculateTotal();
+        btnContinueShopping.setOnClickListener(v -> {
+            // go back to user home
+            finish();
+        });
+
+        btnPayment.setOnClickListener(v -> {
+            double total = 0;
+            for (CartItem item : cartItems) {
+                total += item.getPrice() * item.getQuantity();
+            }
+
+            Intent intent = new Intent(ShoppingCartActivity.this, UserPaymentActivity.class);
+            intent.putExtra("totalAmount", total); // in dollars
+            startActivity(intent);
+        });
+
     }
 
     @Override
-    public void onItemRemoved(int position) {
-        productList.remove(position);
-        adapter.notifyItemRemoved(position);
-        calculateTotal();
+    protected void onResume() {
+        super.onResume();
+        loadCart();
     }
 
-    @Override
-    public void onQuantityChanged() {
-        calculateTotal();
-    }
-    private void calculateTotal() {
-        double total = 0;
-
-        for (int i = 0; i < recyclerView.getChildCount(); i++) {
-            View view = recyclerView.getChildAt(i);
-
-            EditText etQuantity = view.findViewById(R.id.etQuantity);
-            String quantityText = etQuantity.getText().toString();
-
-            int quantity = (quantityText.isEmpty()) ? 0 : Integer.parseInt(quantityText);
-
-            TextView tvPrice = view.findViewById(R.id.tvPrice);
-            String priceText = tvPrice.getText().toString().replace("$", "");
-            double price = Double.parseDouble(priceText);
-
-            total += price * quantity;
+    private void loadCart() {
+        if (auth.getCurrentUser() == null) {
+            Toast.makeText(this, "Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        String formattedTotal = String.format("%.2f", total);
-        cartTotal.setText("$" + formattedTotal);
+        String uid = auth.getCurrentUser().getUid();
+
+        db.collection("users")
+                .document(uid)
+                .collection("cartItems")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    cartItems.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        CartItem item = doc.toObject(CartItem.class);
+                        cartItems.add(item);
+                    }
+                    adapter.notifyDataSetChanged();
+                    updateTotal();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Failed to load cart: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
+    private void updateTotal() {
+        double total = 0;
+        for (CartItem item : cartItems) {
+            total += item.getPrice() * item.getQuantity();
+        }
+        cartTotal.setText(String.format("$%.2f", total));
+    }
 
+    @Override
+    public void onIncreaseQuantity(CartItem item) {
+        changeQuantity(item, item.getQuantity() + 1);
+    }
+
+    @Override
+    public void onDecreaseQuantity(CartItem item) {
+        int newQty = item.getQuantity() - 1;
+        if (newQty <= 0) {
+            deleteItem(item);
+        } else {
+            changeQuantity(item, newQty);
+        }
+    }
+
+    private void changeQuantity(CartItem item, int newQty) {
+        if (auth.getCurrentUser() == null) return;
+        String uid = auth.getCurrentUser().getUid();
+
+        db.collection("users")
+                .document(uid)
+                .collection("cartItems")
+                .document(item.getProductId())
+                .update("quantity", newQty)
+                .addOnSuccessListener(unused -> {
+                    item.setQuantity(newQty);
+                    adapter.notifyDataSetChanged();
+                    updateTotal();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Failed to update quantity: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void deleteItem(CartItem item) {
+        if (auth.getCurrentUser() == null) return;
+        String uid = auth.getCurrentUser().getUid();
+
+        db.collection("users")
+                .document(uid)
+                .collection("cartItems")
+                .document(item.getProductId())
+                .delete()
+                .addOnSuccessListener(unused -> {
+                    cartItems.remove(item);
+                    adapter.notifyDataSetChanged();
+                    updateTotal();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Failed to remove item: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
 }
-
-
-

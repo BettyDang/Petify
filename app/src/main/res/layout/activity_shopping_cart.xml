@@ -50,6 +50,15 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnContinueShopping"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue Shopping"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#00BCD4" />
+    <Button
         android:id="@+id/payment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

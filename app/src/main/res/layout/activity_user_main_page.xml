@@ -11,25 +11,30 @@
         android:background="#00BCD4"
         android:orientation="horizontal"
         android:paddingStart="20dp"
-        android:paddingTop="40dp">
+        android:paddingEnd="20dp"
+        android:paddingTop="40dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/tvStoreName"
-            android:layout_width="311dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
+            android:layout_weight="1"
             android:text="Pet Shop"
-            android:textSize="22dp"
-            android:textStyle="bold" />
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
 
         <ImageView
             android:id="@+id/imgProfile"
-            android:layout_width="56dp"
-            android:layout_height="33dp"
-            android:src="@drawable/profile" />
-
-
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/profile"
+            android:contentDescription="Profile"
+            android:clickable="true"
+            android:focusable="true" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"

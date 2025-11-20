@@ -4,89 +4,77 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.ProductViewHolder> {
 
-    private final Context context;
-    private final List<Product> products = new ArrayList<>();
-
-    public UserProductAdapter(Context context) {
-        this.context = context;
+    public interface OnProductActionListener {
+        void onAddToCart(Product product);
     }
 
-    public void setItems(List<Product> newItems) {
-        products.clear();
-        products.addAll(newItems);
-        notifyDataSetChanged();
+    private Context context;
+    private List<Product> products;
+    private OnProductActionListener listener;
+
+    public UserProductAdapter(Context context, List<Product> products, OnProductActionListener listener) {
+        this.context = context;
+        this.products = products;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.user_item_product, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.user_item_product, parent, false);
         return new ProductViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product p = products.get(position);
+        Product product = products.get(position);
 
-        holder.tvTitle.setText(p.getTitle());
-        holder.tvCategory.setText(p.getCategory());
-        holder.tvPrice.setText("$" + String.format("%.2f", p.getPrice()));
+        holder.tvTitle.setText(product.getTitle());
+        holder.tvCategory.setText(product.getCategory());
+        holder.tvPrice.setText("$" + product.getPrice());
 
-        String imageUrl = p.getImageUrl();
+        if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+            new Thread(() -> {
+                try {
+                    java.io.InputStream in = new java.net.URL(product.getImageUrl()).openStream();
+                    android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(in);
 
-        // reset to gray placeholder first
-        holder.imgProduct.setImageBitmap(null);
+                    holder.imgProduct.post(() -> holder.imgProduct.setImageBitmap(bmp));
 
-        if (imageUrl == null || imageUrl.isEmpty()) {
-            // no image URL -> leave placeholder
-            return;
+                } catch (Exception e) {
+                    holder.imgProduct.post(() ->
+                            holder.imgProduct.setImageResource(android.R.color.darker_gray));
+                }
+            }).start();
+        } else {
+            holder.imgProduct.setImageResource(android.R.color.darker_gray);
         }
 
-        // Very simple network image loader (no Glide, no extra Gradle deps)
-        new Thread(() -> {
-            try {
-                java.net.URL url = new java.net.URL(imageUrl);
-                java.net.HttpURLConnection connection =
-                        (java.net.HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                java.io.InputStream input = connection.getInputStream();
-                final android.graphics.Bitmap bitmap =
-                        android.graphics.BitmapFactory.decodeStream(input);
-
-                // Update ImageView on UI thread
-                ((android.app.Activity) context).runOnUiThread(() ->
-                        holder.imgProduct.setImageBitmap(bitmap)
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-                // if it fails, we just keep the placeholder
-            }
-        }).start();
+        holder.btnAddToCart.setOnClickListener(v -> {
+            if (listener != null) listener.onAddToCart(product);
+        });
     }
-
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return products != null ? products.size() : 0;
     }
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imgProduct;
         TextView tvTitle, tvCategory, tvPrice;
+        Button btnAddToCart;
 
         ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +82,7 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
             tvTitle = itemView.findViewById(R.id.tvProductTitle);
             tvCategory = itemView.findViewById(R.id.tvProductCategory);
             tvPrice = itemView.findViewById(R.id.tvProductPrice);
+            btnAddToCart = itemView.findViewById(R.id.btnAddToCart);
         }
     }
 }

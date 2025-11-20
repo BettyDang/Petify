@@ -46,4 +46,17 @@
                     android:textSize="15sp"
                     android:textColor="#00BCD4" />
         </LinearLayout>
+
+        <!-- Add to cart button -->
+        <Button
+            android:id="@+id/btnAddToCart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Cart"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#00BCD4"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp" />
+
 </LinearLayout>

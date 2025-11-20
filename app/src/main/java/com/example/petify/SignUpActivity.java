@@ -1,14 +1,12 @@
 package com.example.petify;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +20,6 @@ import java.util.Map;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText etName, etEmail, etPassword, etConfirm;
-    private RadioGroup rgRole;
-    private RadioButton rbUser, rbAdmin;
     private Button btnSignUp;
     private TextView tvGoLogin;
 
@@ -38,6 +34,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         auth = FirebaseUtils.getAuth();
         db = FirebaseUtils.getFirestore();
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Creating account...");
         progressDialog.setCancelable(false);
@@ -46,15 +43,12 @@ public class SignUpActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etConfirm = findViewById(R.id.etConfirm);
-        rgRole = findViewById(R.id.rgRole);
-        rbUser = findViewById(R.id.rbUser);
-        rbAdmin = findViewById(R.id.rbAdmin);
         btnSignUp = findViewById(R.id.btnSignUp);
         tvGoLogin = findViewById(R.id.tvGoLogin);
 
         btnSignUp.setOnClickListener(v -> createAccount());
+
         tvGoLogin.setOnClickListener(v -> {
-            // back to auth options (so user chooses login type)
             Intent intent = new Intent(SignUpActivity.this, AuthOptionsActivity.class);
             startActivity(intent);
             finish();
@@ -93,7 +87,8 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        String role = rbAdmin.isChecked() ? "admin" : "user";
+        // Force every in-app signup to be a normal user
+        String role = "user";
 
         progressDialog.show();
 
@@ -116,7 +111,6 @@ public class SignUpActivity extends AppCompatActivity {
                                         "Account created. Please log in.",
                                         Toast.LENGTH_LONG).show();
 
-                                // Go back to auth options so they pick correct login screen
                                 Intent intent = new Intent(SignUpActivity.this, AuthOptionsActivity.class);
                                 startActivity(intent);
                                 finish();
