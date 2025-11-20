@@ -38,55 +38,106 @@
     </LinearLayout>
 
     <!-- Card -->
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@android:color/white"
-        android:elevation="2dp"
-        android:padding="20dp"
-        android:layout_marginTop="24dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-        <!-- Address label -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shipping address"
-            android:textSize="14sp"
-            android:textColor="#444444"
-            android:layout_marginBottom="4dp" />
-
-
-        <!-- Address input -->
-        <EditText
-            android:id="@+id/etAddress"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Street, city, postal code"
-            android:background="#EFEFF4"
-            android:padding="10dp"
-            android:minLines="2"
-            android:maxLines="3"
-            android:gravity="top|start"
-            android:inputType="textMultiLine"
-            android:layout_marginBottom="16dp" />
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:elevation="2dp"
+            android:padding="20dp"
+            android:layout_marginTop="24dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="You will be redirected to Stripe's secure payment form."
-            android:textSize="14sp"
-            android:textColor="#666666" />
+            <!-- Address line -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address line"
+                android:textSize="14sp"
+                android:textColor="#444444" />
 
-        <Button
-            android:id="@+id/payment"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
-            android:text="Pay with Stripe"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#00BCD4" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/etAddressLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="1234 Street Name"
+                android:background="#EFEFF4"
+                android:padding="10dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Postal code -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Postal code"
+                android:textSize="14sp"
+                android:textColor="#444444" />
+
+            <EditText
+                android:id="@+id/etPostalCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="H3B 1X8"
+                android:background="#EFEFF4"
+                android:padding="10dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- City -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="City"
+                android:textSize="14sp"
+                android:textColor="#444444" />
+
+            <EditText
+                android:id="@+id/etCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Montréal"
+                android:background="#EFEFF4"
+                android:padding="10dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Country -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Country"
+                android:textSize="14sp"
+                android:textColor="#444444" />
+
+            <EditText
+                android:id="@+id/etCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Canada"
+                android:background="#EFEFF4"
+                android:padding="10dp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You will be redirected to Stripe's secure payment form."
+                android:textSize="14sp"
+                android:textColor="#666666" />
+
+            <Button
+                android:id="@+id/payment"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:text="Pay with Stripe"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#00BCD4" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -1,154 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="30dp"
-    android:padding="10dp">
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Profile"
-        android:textSize="28dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:paddingBottom="20dp"
-        />
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#555555"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"
-        android:text="First Name:" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
-    <EditText
-        android:id="@+id/editFn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textSize="16dp"
-        android:hint="Enter first name"
-        android:background="#ffffff"/>
+        <!-- Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Name"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#555555"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"
-        android:text="Last Name:" />
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your name"
+            android:background="#EFEFF4"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp" />
 
-    <EditText
-        android:id="@+id/editLn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textSize="16dp"
-        android:hint="Enter last name"
-        android:background="#ffffff"/>
+        <!-- Address line -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address line"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#555555"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"
-        android:text="Email:" />
+        <EditText
+            android:id="@+id/etAddressLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="1234 Street Name"
+            android:background="#EFEFF4"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp" />
 
-    <EditText
-        android:id="@+id/editEmail"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textSize="16dp"
-        android:hint="Enter email"
-        android:background="#ffffff"/>
+        <!-- Postal code -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Postal code"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#555555"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"
-        android:text="Adress:" />
+        <EditText
+            android:id="@+id/etPostalCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="H3B 1X8"
+            android:background="#EFEFF4"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp" />
 
-    <EditText
-        android:id="@+id/editAddress"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textSize="16dp"
-        android:hint="Enter Address"
-        android:background="#ffffff"/>
+        <!-- City -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#555555"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"
-        android:text="Postal Code:" />
+        <EditText
+            android:id="@+id/etCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Montréal"
+            android:background="#EFEFF4"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp" />
 
-    <EditText
-        android:id="@+id/editPostalCode"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textSize="16dp"
-        android:hint="Enter postal code"
-        android:background="#ffffff"/>
+        <!-- Country -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Country"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#555555"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"
-        android:text="City:" />
+        <EditText
+            android:id="@+id/etCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Canada"
+            android:background="#EFEFF4"
+            android:padding="10dp"
+            android:layout_marginBottom="20dp" />
 
-    <EditText
-        android:id="@+id/editCity"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textSize="16dp"
-        android:hint="Enter city"
-        android:background="#ffffff"/>
+        <Button
+            android:id="@+id/btnSaveProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="10dp" />
 
-    <Button
-        android:id="@+id/btnSaveProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Changes"
-        android:backgroundTint="#007aff"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="20dp"/>
+        <Button
+            android:id="@+id/btnBackToProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:backgroundTint="#9E9E9E"
+            android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/btnBackToProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back To Profile"
-        android:backgroundTint="#009D0D"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="20dp"/>
-
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
