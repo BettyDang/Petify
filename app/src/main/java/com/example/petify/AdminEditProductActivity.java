@@ -1,18 +1,24 @@
 package com.example.petify;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -21,6 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AdminEditProductActivity extends AppCompatActivity {
+
+    private static final int REQ_PICK_IMAGE = 1001;
 
     private ImageView imgProduct;
     private EditText edtTitle, edtPrice, edtStock, edtCategory, edtDescription;
@@ -31,6 +39,7 @@ public class AdminEditProductActivity extends AppCompatActivity {
 
     private String productId;
     private String imageUrl;
+    private Uri newImageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +52,6 @@ public class AdminEditProductActivity extends AppCompatActivity {
             finish();
             return;
         }
-
 
         db = FirebaseUtils.getFirestore();
         progressDialog = new ProgressDialog(this);
@@ -60,16 +68,19 @@ public class AdminEditProductActivity extends AppCompatActivity {
         btnRemoveImage = findViewById(R.id.btnRemoveImage);
         btnSave = findViewById(R.id.btnSave);
 
+        // pick image from gallery
+        btnSelectImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(intent, REQ_PICK_IMAGE);
+        });
 
-        btnSelectImage.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "Image change not implemented in this version",
-                        Toast.LENGTH_SHORT).show());
-
-
+        // mark image as removed
         btnRemoveImage.setOnClickListener(v -> {
             imageUrl = null;
-            imgProduct.setImageDrawable(null);  // clear preview
+            newImageUri = null;
+            imgProduct.setImageDrawable(null);
             Toast.makeText(this,
                     "Image removed. Tap Save to apply.",
                     Toast.LENGTH_SHORT).show();
@@ -78,6 +89,18 @@ public class AdminEditProductActivity extends AppCompatActivity {
         btnSave.setOnClickListener(v -> saveChanges());
 
         loadProduct();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_PICK_IMAGE && resultCode == RESULT_OK &&
+                data != null && data.getData() != null) {
+            newImageUri = data.getData();
+            imgProduct.setImageURI(newImageUri);   // show preview
+        }
     }
 
 
@@ -121,7 +144,6 @@ public class AdminEditProductActivity extends AppCompatActivity {
                     finish();
                 });
     }
-
 
     private void loadImageFromUrl(String urlString) {
         new Thread(() -> {
@@ -179,8 +201,52 @@ public class AdminEditProductActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog.setMessage("Saving changes...");
+        if (newImageUri != null) {
+            uploadImageAndSave(title, price, stock, category, description);
+        } else {
+            progressDialog.setMessage("Saving changes...");
+            progressDialog.show();
+            saveProductToFirestore(title, price, stock, category, description);
+        }
+    }
+
+    private void uploadImageAndSave(String title,
+                                    double price,
+                                    int stock,
+                                    String category,
+                                    String description) {
+
+        progressDialog.setMessage("Uploading image...");
         progressDialog.show();
+
+        StorageReference ref = FirebaseStorage.getInstance()
+                .getReference()
+                .child("product_images/" + productId + ".jpg");
+
+        ref.putFile(newImageUri)
+                .addOnSuccessListener(taskSnapshot ->
+                        ref.getDownloadUrl().addOnSuccessListener(uri -> {
+                            imageUrl = uri.toString(); // new URL
+                            saveProductToFirestore(title, price, stock, category, description);
+                        }).addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(this,
+                                    "Failed to get image URL: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }))
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this,
+                            "Image upload failed: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                });
+    }
+
+    private void saveProductToFirestore(String title,
+                                        double price,
+                                        int stock,
+                                        String category,
+                                        String description) {
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("title", title);
@@ -188,7 +254,6 @@ public class AdminEditProductActivity extends AppCompatActivity {
         updates.put("stock", stock);
         updates.put("category", category);
         updates.put("description", description);
-
 
         if (imageUrl == null || imageUrl.isEmpty()) {
             updates.put("imageUrl", null);
@@ -202,7 +267,7 @@ public class AdminEditProductActivity extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     progressDialog.dismiss();
                     Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
-                    finish(); // go back to list
+                    finish();
                 })
                 .addOnFailureListener(e -> {
                     progressDialog.dismiss();

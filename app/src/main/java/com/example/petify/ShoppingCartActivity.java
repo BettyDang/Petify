@@ -35,8 +35,8 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartAdapt
         cartTotal = findViewById(R.id.cart_total);
 
         productList = new ArrayList<>();
-        productList.add(new Product("Cat Mouse", "$19.99", R.drawable.ic_launcher_foreground));
-        productList.add(new Product("Cat Bed", "$59.99", R.drawable.ic_launcher_foreground));
+//        productList.add(new Product("Cat Mouse", "$19.99", R.drawable.ic_launcher_foreground));
+//        productList.add(new Product("Cat Bed", "$59.99", R.drawable.ic_launcher_foreground));
 
         adapter = new CartAdapter(productList, this);
         recyclerView.setAdapter(adapter);

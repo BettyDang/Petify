@@ -233,5 +233,17 @@
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 
+        <!-- Logout button -->
+        <Button
+            android:id="@+id/btnAdminLogout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:text="Log Out"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#B00020" />
+
+
     </LinearLayout>
 </ScrollView>

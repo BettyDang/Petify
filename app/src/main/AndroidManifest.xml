@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
 
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +23,8 @@
 
         <activity android:name=".AdminEditProductActivity" android:exported="false" />
         <activity android:name=".AdminProductsActivity" android:exported="false" />
+        <activity android:name=".AdminUsersActivity" android:exported="false" />
+
 
         <activity
             android:name=".AdminLoginActivity"

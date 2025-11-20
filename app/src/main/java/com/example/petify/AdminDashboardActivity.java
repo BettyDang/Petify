@@ -6,6 +6,9 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.content.Intent;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +21,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private Button btnViewOrders;
     private Button btnViewPayments;
     private Button btnViewUsers;
+
+    private Button btnAdminLogout;
 
     private LinearLayout cardProducts;
     private LinearLayout cardOrders;
@@ -74,7 +79,21 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         // View Users
         btnViewUsers.setOnClickListener(v ->
-                Toast.makeText(this, "Open users list (admin)", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(AdminDashboardActivity.this,
+                        AdminUsersActivity.class)));
+
+        btnAdminLogout = findViewById(R.id.btnAdminLogout);
+
+        btnAdminLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            // Go back to auth options (change class if you use another entry point)
+            Intent i = new Intent(AdminDashboardActivity.this, AuthOptionsActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
+        });
+
+
 
         // Optional: cards tap the same as buttons
         if (cardProducts != null) {
