@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    Button btnAccount, btnChangePassword, btnOrders, btnPayments, btnBacktoMainPage;
+    Button btnAccount, btnChangePassword, btnOrders, btnPayments, btnBacktoMainPage, btnShoppingCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnOrders = findViewById(R.id.btnOrders);
         btnPayments = findViewById(R.id.btnPayments);
         btnBacktoMainPage = findViewById(R.id.btnBacktoMainPage);
+        btnShoppingCart = findViewById(R.id.btnShoppingCart);
 
         btnAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +37,14 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, UserChangePasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnShoppingCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, ShoppingCartActivity.class);
                 startActivity(intent);
             }
         });

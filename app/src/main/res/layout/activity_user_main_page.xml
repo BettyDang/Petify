@@ -23,12 +23,10 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/ImgProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_myplaces"
-            android:onClick="onImageClick"
-            />
+            android:id="@+id/imgProfile"
+            android:layout_width="56dp"
+            android:layout_height="33dp"
+            android:src="@drawable/profile" />
 
 
     </LinearLayout>
@@ -48,12 +46,10 @@
 
 
         <ImageView
-            android:id="@+id/ImgCart"
+            android:id="@+id/imgCart"
             android:layout_width="47dp"
             android:layout_height="match_parent"
-            android:src="@android:drawable/ic_menu_camera"
-
-            />
+            android:src="@drawable/shopping_cart"/>
 
     </LinearLayout>
 

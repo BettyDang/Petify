@@ -1,6 +1,9 @@
 package com.example.petify;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,8 @@ import java.util.List;
 public class UserHomePageActivity extends AppCompatActivity {
 
     private RecyclerView rvProduct;
+
+    ImageView imgCart, imgProfile;
     private UserProductAdapter adapter;
     private FirebaseFirestore db;
 
@@ -29,10 +34,29 @@ public class UserHomePageActivity extends AppCompatActivity {
         rvProduct = findViewById(R.id.rvProduct);
         rvProduct.setLayoutManager(new LinearLayoutManager(this));
 
+        imgCart = findViewById(R.id.imgCart);
+        imgProfile = findViewById(R.id.imgProfile);
+
         adapter = new UserProductAdapter(this);
         rvProduct.setAdapter(adapter);
 
         loadProducts();
+
+        imgCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserHomePageActivity.this, ShoppingCartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserHomePageActivity.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadProducts() {
