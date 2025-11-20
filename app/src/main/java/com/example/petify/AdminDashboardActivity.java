@@ -71,11 +71,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         // View Orders
         btnViewOrders.setOnClickListener(v ->
-                Toast.makeText(this, "Open orders list (admin)", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(AdminDashboardActivity.this, AdminOrdersActivity.class)));
 
         // View Payments
         btnViewPayments.setOnClickListener(v ->
-                Toast.makeText(this, "Open payments list (admin)", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(AdminDashboardActivity.this, AdminPaymentsActivity.class)));
+
 
         // View Users
         btnViewUsers.setOnClickListener(v ->

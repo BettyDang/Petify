@@ -17,25 +17,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <!-- Customer name + total -->
     <TextView
         android:id="@+id/tvOrderMeta"
-        android:text="John Doe • $45.90"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:layout_marginTop="2dp"
+        android:text="John Doe • john@gmail.com"
+        android:textSize="15sp"
+        android:textColor="#222222"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <!-- Status -->
+    <TextView
+        android:id="@+id/tvOrderAmount"
+        android:text="Total: $45.90"
+        android:textSize="14sp"
+        android:textColor="#444444"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:id="@+id/tvOrderStatus"
-        android:text="Status: Pending"
+        android:text="Status: Paid"
         android:textSize="14sp"
         android:textColor="#5B6CFF"
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
 
     <View
         android:layout_width="match_parent"

@@ -14,20 +14,39 @@
         android:text="Hello, User"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#1A237E"
+        android:textColor="#1A237E" />
+
+    <!-- Address line -->
+    <TextView
+        android:id="@+id/tvUserAddressLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No address set"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="4dp" />
+
+    <!-- Postal + city + country -->
+    <TextView
+        android:id="@+id/tvUserAddressMeta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="13sp"
+        android:textColor="#777777"
         android:layout_marginBottom="24dp" />
 
-<!--    &lt;!&ndash; Edit profile &ndash;&gt;-->
-<!--    <Button-->
-<!--        android:id="@+id/btnAccount"-->
-<!--        android:layout_width="250dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Edit Profile"-->
-<!--        android:padding="16dp"-->
-<!--        android:textSize="18sp"-->
-<!--        android:backgroundTint="#FF9800"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        android:layout_marginBottom="10dp" />-->
+    <!-- Edit profile -->
+    <Button
+        android:id="@+id/btnAccount"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:padding="16dp"
+        android:textSize="18sp"
+        android:backgroundTint="#FF9800"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="10dp" />
 
     <!-- Change password -->
     <Button
@@ -53,7 +72,7 @@
         android:textColor="@android:color/white"
         android:layout_marginBottom="10dp" />
 
-    <!-- Orders (user history – to implement later) -->
+    <!-- Orders -->
     <Button
         android:id="@+id/btnOrders"
         android:layout_width="250dp"
@@ -65,19 +84,7 @@
         android:textColor="@android:color/white"
         android:layout_marginBottom="10dp" />
 
-    <!-- Payments (user history – to implement later) -->
-    <Button
-        android:id="@+id/btnPayments"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:text="Payment History"
-        android:padding="16dp"
-        android:textSize="18sp"
-        android:backgroundTint="#FF5722"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="10dp" />
-
-    <!-- Back to home -->
+    <!-- Home -->
     <Button
         android:id="@+id/btnBacktoMainPage"
         android:layout_width="250dp"
