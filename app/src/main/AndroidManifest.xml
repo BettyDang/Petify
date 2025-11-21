@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Petify">
 
-        <!-- ADMIN -->
+
         <activity
             android:name=".AdminDashboardActivity"
             android:exported="false" />
@@ -48,7 +48,7 @@
             android:name=".AdminPaymentsActivity"
             android:exported="false" />
 
-        <!-- USER -->
+
         <activity
             android:name=".UserHomePageActivity"
             android:exported="false" />
@@ -69,7 +69,7 @@
             android:name=".EditProfileActivity"
             android:exported="false" />
 
-        <!-- USER cart / history -->
+
         <activity
             android:name=".ShoppingCartActivity"
             android:exported="false" />
@@ -78,16 +78,14 @@
             android:name=".UserOrderHistoryActivity"
             android:exported="false" />
 
-<!--        <activity-->
-<!--            android:name=".UserPaymentHistoryActivity"-->
-<!--            android:exported="false" />-->
+
 
         <activity
             android:name=".UserPaymentActivity"
             android:exported="false" />
 
 
-        <!-- AUTH FLOW -->
+
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />
@@ -106,7 +104,6 @@
             android:exported="false" />
 
 
-        <!-- SPLASH = FIRST SCREEN -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
