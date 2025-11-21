@@ -34,10 +34,9 @@ public class UserPaymentActivity extends AppCompatActivity {
     private TextView tvAmount;
 
     // Stripe test keys
-    private final String PublishableKey =
-            "xx";
-    private final String SecretKey =
-            "xx";
+    private String PublishableKey = "xx";
+    private String SecretKey = "xx";
+
 
     private final String CustomersURL    = "https://api.stripe.com/v1/customers";
     private final String EphemeralKeyURL = "https://api.stripe.com/v1/ephemeral_keys";

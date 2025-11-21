@@ -25,7 +25,6 @@
                     android:id="@+id/tvProductTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Product title"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:textColor="#111111" />
@@ -34,7 +33,6 @@
                     android:id="@+id/tvProductCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Category"
                     android:textSize="13sp"
                     android:textColor="#666666" />
 
@@ -42,10 +40,18 @@
                     android:id="@+id/tvProductPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$0.00"
                     android:textSize="15sp"
                     android:textColor="#00BCD4" />
         </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/btnFavorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_favorite_border"
+            android:backgroundTint="@color/red" />
 
 
         <Button
@@ -56,7 +62,5 @@
             android:textSize="12sp"
             android:textAllCaps="false"
             android:backgroundTint="#00BCD4"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="8dp" />
-
+            android:textColor="@android:color/white" />
 </LinearLayout>

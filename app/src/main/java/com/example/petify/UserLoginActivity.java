@@ -119,11 +119,20 @@ public class UserLoginActivity extends AppCompatActivity {
             return;
         }
 
+        Boolean blocked = doc.getBoolean("blocked");
+        if (blocked != null && blocked) {
+            Toast.makeText(this,
+                    "Your account has been blocked. Please contact support.",
+                    Toast.LENGTH_LONG).show();
+            auth.signOut();
+            return;
+        }
+
         String role = doc.getString("role");
         if ("user".equals(role)) {
             Intent intent = new Intent(UserLoginActivity.this, UserHomePageActivity.class);
             startActivity(intent);
-            finishAffinity(); // clear back stack
+            finishAffinity();
         } else {
             Toast.makeText(this,
                     "This account is not a user account. Use Admin Login.",

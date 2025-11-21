@@ -11,13 +11,14 @@ public class UserProfile {
     private String postalCode;
     private String city;
     private String country;
+    private boolean blocked;
 
     public UserProfile() {
 
     }
 
     public UserProfile(String id, String name, String email, String role,
-                       String addressLine, String postalCode, String city, String country) {
+                       String addressLine, String postalCode, String city, String country, boolean blocked) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -26,6 +27,15 @@ public class UserProfile {
         this.postalCode = postalCode;
         this.city = city;
         this.country = country;
+        this.blocked = blocked;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     public String getId() { return id; }

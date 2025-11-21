@@ -28,6 +28,12 @@
             android:exported="false" />
 
         <activity
+            android:name=".UserFavoritesActivity"
+            android:exported="false" />
+
+
+
+        <activity
             android:name=".AdminProductsActivity"
             android:exported="false" />
 
