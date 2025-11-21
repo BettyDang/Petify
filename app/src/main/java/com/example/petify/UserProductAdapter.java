@@ -1,6 +1,7 @@
 package com.example.petify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +45,13 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         holder.tvCategory.setText(product.getCategory());
         holder.tvPrice.setText("$" + product.getPrice());
 
+        // Load image (simple manual way)
         if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
             new Thread(() -> {
                 try {
                     java.io.InputStream in = new java.net.URL(product.getImageUrl()).openStream();
-                    android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(in);
+                    android.graphics.Bitmap bmp =
+                            android.graphics.BitmapFactory.decodeStream(in);
 
                     holder.imgProduct.post(() -> holder.imgProduct.setImageBitmap(bmp));
 
@@ -61,9 +64,22 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
             holder.imgProduct.setImageResource(android.R.color.darker_gray);
         }
 
+        // Add-to-cart button (same behavior as before)
         holder.btnAddToCart.setOnClickListener(v -> {
             if (listener != null) listener.onAddToCart(product);
         });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, UserProductDetailActivity.class);
+            intent.putExtra("productId", product.getId());
+            intent.putExtra("title", product.getTitle());
+            intent.putExtra("category", product.getCategory());
+            intent.putExtra("price", product.getPrice());
+            intent.putExtra("imageUrl", product.getImageUrl());
+            intent.putExtra("description", product.getDescription());
+            context.startActivity(intent);
+        });
+
     }
 
     @Override

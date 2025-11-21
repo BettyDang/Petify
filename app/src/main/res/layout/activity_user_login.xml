@@ -65,6 +65,17 @@
                 android:background="#EFEFF4"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"/>
+
+            <TextView
+                android:id="@+id/tvUserForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:textColor="#009688"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="end"/>
+
         </LinearLayout>
 
         <!-- Login Button -->

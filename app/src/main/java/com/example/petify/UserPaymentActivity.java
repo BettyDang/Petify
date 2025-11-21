@@ -3,7 +3,6 @@ package com.example.petify;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
@@ -34,31 +32,29 @@ public class UserPaymentActivity extends AppCompatActivity {
 
     private Button paymentButton;
     private TextView tvAmount;
-    private EditText etAddressLine, etPostalCode, etCity, etCountry;
 
-    // Stripe keys
-    private String PublishableKey = "xxx";
-    private String SecretKey = "xxx";
+    // Stripe test keys
+    private final String PublishableKey =
+            "xxx";
+    private final String SecretKey =
+            "xx";
 
-    private String CustomersURL    = "https://api.stripe.com/v1/customers";
-    private String EphericalKeyURL = "https://api.stripe.com/v1/ephemeral_keys";
-    private String ClientSecretURL = "https://api.stripe.com/v1/payment_intents";
+    private final String CustomersURL    = "https://api.stripe.com/v1/customers";
+    private final String EphemeralKeyURL = "https://api.stripe.com/v1/ephemeral_keys";
+    private final String ClientSecretURL = "https://api.stripe.com/v1/payment_intents";
 
     private String CustomerId = null;
-    private String EphericalKey;
+    private String EphemeralKey;
     private String ClientSecret;
 
     private PaymentSheet paymentSheet;
 
-    // Amount in cents (string, for Stripe)
-    private String Amount;
-    private String Currency = "usd";
+    // Stripe amount (in cents) and currency
+    private String Amount;            // e.g. "1500"
+    private final String Currency = "usd";
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-
-    // address pieces
-    private String addrLine, postalCode, city, country;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +62,13 @@ public class UserPaymentActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_payment);
 
-        paymentButton   = findViewById(R.id.payment);
-        tvAmount        = findViewById(R.id.tvAmount);
-        etAddressLine   = findViewById(R.id.etAddressLine);
-        etPostalCode    = findViewById(R.id.etPostalCode);
-        etCity          = findViewById(R.id.etCity);
-        etCountry       = findViewById(R.id.etCountry);
+        paymentButton = findViewById(R.id.payment);
+        tvAmount      = findViewById(R.id.tvAmount);
 
         auth = FirebaseAuth.getInstance();
         db   = FirebaseFirestore.getInstance();
 
-        // Get total from intent
+        // Get total from ShoppingCartActivity
         double total = getIntent().getDoubleExtra("totalAmount", 0.0);
         tvAmount.setText(String.format("Total: $%.2f", total));
 
@@ -87,64 +79,41 @@ public class UserPaymentActivity extends AppCompatActivity {
         PaymentConfiguration.init(this, PublishableKey);
         paymentSheet = new PaymentSheet(this, this::onPaymentResult);
 
-        paymentButton.setOnClickListener(view -> {
-            addrLine   = etAddressLine.getText().toString().trim();
-            postalCode = etPostalCode.getText().toString().trim();
-            city       = etCity.getText().toString().trim();
-            country    = etCountry.getText().toString().trim();
-
-            if (addrLine.isEmpty()) {
-                etAddressLine.setError("Required");
-                etAddressLine.requestFocus();
-                return;
-            }
-            if (postalCode.isEmpty()) {
-                etPostalCode.setError("Required");
-                etPostalCode.requestFocus();
-                return;
-            }
-            if (city.isEmpty()) {
-                etCity.setError("Required");
-                etCity.requestFocus();
-                return;
-            }
-            if (country.isEmpty()) {
-                etCountry.setError("Required");
-                etCountry.requestFocus();
-                return;
-            }
-
+        paymentButton.setOnClickListener(v -> {
             if (CustomerId != null && !CustomerId.isEmpty()) {
                 paymentFlow();
             } else {
-                Toast.makeText(UserPaymentActivity.this, "Customer ID is not available", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Stripe customer not ready yet", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Start Stripe flow: create customer first
+        // Start Stripe flow by creating customer
         createCustomer();
     }
 
+    // ----------------- STRIPE API CALLS -----------------
+
     private void createCustomer() {
-        StringRequest request = new StringRequest(Request.Method.POST, CustomersURL,
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                CustomersURL,
                 response -> {
                     try {
                         JSONObject object = new JSONObject(response);
                         CustomerId = object.getString("id");
                         Log.d("Stripe", "Customer created: " + CustomerId);
-
-                        if (CustomerId != null && !CustomerId.isEmpty()) {
-                            getEphericalKey();
-                        } else {
-                            Toast.makeText(UserPaymentActivity.this, "Failed to create customer", Toast.LENGTH_SHORT).show();
-                        }
+                        getEphemeralKey();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(UserPaymentActivity.this, "Error creating customer: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,
+                                "Error creating customer: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(UserPaymentActivity.this, "Error creating customer: " + error.getLocalizedMessage(), Toast.LENGTH_SHORT).show()) {
-
+                error -> Toast.makeText(this,
+                        "Error creating customer: " + error.getLocalizedMessage(),
+                        Toast.LENGTH_SHORT).show()
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -153,30 +122,31 @@ public class UserPaymentActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 
-    private void getEphericalKey() {
-        StringRequest request = new StringRequest(Request.Method.POST, EphericalKeyURL,
+    private void getEphemeralKey() {
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                EphemeralKeyURL,
                 response -> {
                     try {
                         JSONObject object = new JSONObject(response);
-                        EphericalKey = object.getString("id");
-                        Log.d("Stripe", "Ephemeral Key created: " + EphericalKey);
-
-                        if (EphericalKey != null && !EphericalKey.isEmpty()) {
-                            getClientSecret(CustomerId, EphericalKey);
-                        } else {
-                            Toast.makeText(UserPaymentActivity.this, "Failed to fetch ephemeral key", Toast.LENGTH_SHORT).show();
-                        }
+                        EphemeralKey = object.getString("id");
+                        Log.d("Stripe", "Ephemeral key: " + EphemeralKey);
+                        getClientSecret(CustomerId, EphemeralKey);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(UserPaymentActivity.this, "Error fetching ephemeral key: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,
+                                "Error getting ephemeral key: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(UserPaymentActivity.this, "Error fetching ephemeral key: " + error.getLocalizedMessage(), Toast.LENGTH_SHORT).show()) {
-
+                error -> Toast.makeText(this,
+                        "Error getting ephemeral key: " + error.getLocalizedMessage(),
+                        Toast.LENGTH_SHORT).show()
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -193,24 +163,30 @@ public class UserPaymentActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 
     private void getClientSecret(String customerId, String ephemeralKey) {
-        StringRequest request = new StringRequest(Request.Method.POST, ClientSecretURL,
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                ClientSecretURL,
                 response -> {
                     try {
                         JSONObject object = new JSONObject(response);
                         ClientSecret = object.getString("client_secret");
-                        Log.d("Stripe", "Client Secret created: " + ClientSecret);
+                        Log.d("Stripe", "Client secret: " + ClientSecret);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(UserPaymentActivity.this, "Error fetching client secret: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,
+                                "Error getting client secret: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(UserPaymentActivity.this, "Error fetching client secret: " + error.getLocalizedMessage(), Toast.LENGTH_SHORT).show()) {
-
+                error -> Toast.makeText(this,
+                        "Error getting client secret: " + error.getLocalizedMessage(),
+                        Toast.LENGTH_SHORT).show()
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -229,54 +205,63 @@ public class UserPaymentActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 
     private void paymentFlow() {
-        if (ClientSecret != null && !ClientSecret.isEmpty()) {
-            paymentSheet.presentWithPaymentIntent(
-                    ClientSecret,
-                    new PaymentSheet.Configuration(
-                            "Petify",
-                            new PaymentSheet.CustomerConfiguration(
-                                    CustomerId,
-                                    EphericalKey
-                            )
-                    )
-            );
+        if (ClientSecret == null || ClientSecret.isEmpty()) {
+            Toast.makeText(this, "Client secret not ready", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        paymentSheet.presentWithPaymentIntent(
+                ClientSecret,
+                new PaymentSheet.Configuration(
+                        "Petify",
+                        new PaymentSheet.CustomerConfiguration(
+                                CustomerId,
+                                EphemeralKey
+                        )
+                )
+        );
+    }
+
+    private void onPaymentResult(@NonNull PaymentSheetResult result) {
+        if (result instanceof PaymentSheetResult.Completed) {
+            Toast.makeText(this, "Payment success", Toast.LENGTH_SHORT).show();
+            saveOrderAndClearCart();
         } else {
-            Toast.makeText(UserPaymentActivity.this, "Client Secret not available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Payment failed or cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void onPaymentResult(@NonNull PaymentSheetResult paymentSheetResult) {
-        if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
-            Toast.makeText(this, "Payment Success", Toast.LENGTH_SHORT).show();
-            saveOrderPaymentAndAddress();
-        } else {
-            Toast.makeText(this, "Payment Failed or Canceled", Toast.LENGTH_SHORT).show();
-        }
-    }
+    // ----------------- FIRESTORE ORDER + PAYMENT -----------------
 
-    private void saveOrderPaymentAndAddress() {
+    private void saveOrderAndClearCart() {
         if (auth.getCurrentUser() == null) {
             finish();
             return;
         }
 
-        final String uid   = auth.getCurrentUser().getUid();
-        final double total = getIntent().getDoubleExtra("totalAmount", 0.0);
-        final long now     = System.currentTimeMillis();
+        String uid   = auth.getCurrentUser().getUid();
+        String email = auth.getCurrentUser().getEmail();
+        double total = getIntent().getDoubleExtra("totalAmount", 0.0);
+        long now     = System.currentTimeMillis();
 
-        db.collection("users").document(uid)
-                .get()
-                .addOnSuccessListener((DocumentSnapshot doc) -> {
+        // First load user profile so we can include address
+        db.collection("users").document(uid).get()
+                .addOnSuccessListener(doc -> {
+                    UserProfile profile = doc.toObject(UserProfile.class);
 
-                    String name  = doc.contains("name")  ? doc.getString("name")  : "";
-                    String email = doc.contains("email") ? doc.getString("email") : auth.getCurrentUser().getEmail();
+                    String name    = profile != null && profile.getName() != null
+                            ? profile.getName() : "";
+                    String line    = profile != null ? profile.getAddressLine()   : null;
+                    String pc      = profile != null ? profile.getPostalCode()    : null;
+                    String city    = profile != null ? profile.getCity()          : null;
+                    String country = profile != null ? profile.getCountry()       : null;
 
-                    // Order data
+                    // Build order
                     Map<String, Object> orderData = new HashMap<>();
                     orderData.put("userId", uid);
                     orderData.put("userName", name);
@@ -284,75 +269,63 @@ public class UserPaymentActivity extends AppCompatActivity {
                     orderData.put("totalAmount", total);
                     orderData.put("status", "paid");
                     orderData.put("createdAt", now);
-                    orderData.put("addressLine", addrLine);
-                    orderData.put("postalCode", postalCode);
-                    orderData.put("city", city);
-                    orderData.put("country", country);
+
+                    orderData.put("shippingAddressLine", line);
+                    orderData.put("shippingPostalCode", pc);
+                    orderData.put("shippingCity", city);
+                    orderData.put("shippingCountry", country);
 
                     db.collection("orders")
                             .add(orderData)
                             .addOnSuccessListener(orderRef -> {
-
-                                // Payment data
+                                // Also create payment document
                                 Map<String, Object> paymentData = new HashMap<>();
+                                paymentData.put("orderId", orderRef.getId());
                                 paymentData.put("userId", uid);
                                 paymentData.put("userName", name);
                                 paymentData.put("userEmail", email);
                                 paymentData.put("amount", total);
                                 paymentData.put("status", "completed");
+                                paymentData.put("method", "stripe");
                                 paymentData.put("createdAt", now);
-                                paymentData.put("orderId", orderRef.getId());
-                                paymentData.put("method", "Stripe");
-                                paymentData.put("addressLine", addrLine);
-                                paymentData.put("postalCode", postalCode);
-                                paymentData.put("city", city);
-                                paymentData.put("country", country);
 
                                 db.collection("payments")
                                         .add(paymentData)
                                         .addOnSuccessListener(paymentRef -> {
-
-                                            // Save address on user profile (4 fields)
-                                            Map<String, Object> addressUpdate = new HashMap<>();
-                                            addressUpdate.put("addressLine", addrLine);
-                                            addressUpdate.put("postalCode", postalCode);
-                                            addressUpdate.put("city", city);
-                                            addressUpdate.put("country", country);
-
-                                            db.collection("users")
-                                                    .document(uid)
-                                                    .update(addressUpdate);
-
-                                            // Clear cart
-                                            db.collection("users")
-                                                    .document(uid)
-                                                    .collection("cartItems")
-                                                    .get()
-                                                    .addOnSuccessListener(snapshot -> {
-                                                        for (QueryDocumentSnapshot d : snapshot) {
-                                                            d.getReference().delete();
-                                                        }
-                                                        Toast.makeText(this, "Order placed successfully", Toast.LENGTH_SHORT).show();
-                                                        finish();
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Toast.makeText(this, "Order saved, but failed to clear cart", Toast.LENGTH_SHORT).show();
-                                                        finish();
-                                                    });
-
+                                            // Clear cart after saving payment
+                                            clearCart(uid);
                                         })
-                                        .addOnFailureListener(e ->
-                                                Toast.makeText(this, "Failed to save payment: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                                        );
-
+                                        .addOnFailureListener(e -> {
+                                            // even if payment doc fails, still clear cart
+                                            clearCart(uid);
+                                        });
                             })
-                            .addOnFailureListener(e ->
-                                    Toast.makeText(this, "Failed to save order: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                            );
-
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(this,
+                                        "Failed to save order: " + e.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                                finish();
+                            });
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load user profile: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                );
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this,
+                            "Failed to load profile: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                    finish();
+                });
+    }
+
+    private void clearCart(String uid) {
+        db.collection("users")
+                .document(uid)
+                .collection("cartItems")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    for (QueryDocumentSnapshot d : snapshot) {
+                        d.getReference().delete();
+                    }
+                    finish(); // back to previous screen (cart → profile/home)
+                })
+                .addOnFailureListener(e -> finish());
     }
 }

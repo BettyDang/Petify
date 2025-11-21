@@ -10,11 +10,20 @@ public class OrderModel {
     private String status;
     private long createdAt;
 
+    private String shippingAddressLine;
+    private String shippingPostalCode;
+    private String shippingCity;
+    private String shippingCountry;
+
+
+
+
     // Required empty constructor for Firestore
     public OrderModel() {}
 
     public OrderModel(String id, String userId, String userName, String userEmail,
-                      double totalAmount, String status, long createdAt) {
+                      double totalAmount, String status, long createdAt, String shippingAddressLine,
+                      String shippingPostalCode, String shippingCity, String shippingCountry) {
         this.id = id;
         this.userId = userId;
         this.userName = userName;
@@ -22,6 +31,10 @@ public class OrderModel {
         this.totalAmount = totalAmount;
         this.status = status;
         this.createdAt = createdAt;
+        this.shippingAddressLine = shippingAddressLine;
+        this.shippingPostalCode = shippingPostalCode;
+        this.shippingCity = shippingCity;
+        this.shippingCountry = shippingCountry;
     }
 
     // Getters
@@ -41,4 +54,9 @@ public class OrderModel {
     public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
     public void setStatus(String status) { this.status = status; }
     public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
+
+    public String getShippingAddressLine() { return shippingAddressLine; }
+    public String getShippingPostalCode() { return shippingPostalCode; }
+    public String getShippingCity() { return shippingCity; }
+    public String getShippingCountry() { return shippingCountry; }
 }

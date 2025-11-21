@@ -2,6 +2,8 @@ package com.example.petify;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,7 +30,11 @@ public class UserHomePageActivity extends AppCompatActivity implements UserProdu
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
-    private List<Product> productList = new ArrayList<>();
+    // full list from Firestore
+    private final List<Product> fullProductList = new ArrayList<>();
+    // currently displayed list (filtered)
+    private final List<Product> productList     = new ArrayList<>();
+
     private UserProductAdapter adapter;
 
     @Override
@@ -38,11 +44,11 @@ public class UserHomePageActivity extends AppCompatActivity implements UserProdu
         setContentView(R.layout.activity_user_main_page);
 
         auth = FirebaseUtils.getAuth();
-        db = FirebaseUtils.getFirestore();
+        db   = FirebaseUtils.getFirestore();
 
-        rvProduct = findViewById(R.id.rvProduct);
-        imgCart = findViewById(R.id.imgCart);
-        imgProfile = findViewById(R.id.imgProfile);
+        rvProduct   = findViewById(R.id.rvProduct);
+        imgCart     = findViewById(R.id.imgCart);
+        imgProfile  = findViewById(R.id.imgProfile);
         EditText editSearch = findViewById(R.id.editSearch);
 
         rvProduct.setLayoutManager(new LinearLayoutManager(this));
@@ -55,6 +61,20 @@ public class UserHomePageActivity extends AppCompatActivity implements UserProdu
         imgProfile.setOnClickListener(v ->
                 startActivity(new Intent(UserHomePageActivity.this, UserProfileActivity.class)));
 
+        // search listener
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterProducts(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
         loadProducts();
     }
 
@@ -62,16 +82,42 @@ public class UserHomePageActivity extends AppCompatActivity implements UserProdu
         db.collection("products")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    fullProductList.clear();
                     productList.clear();
+
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         Product p = doc.toObject(Product.class);
                         p.setId(doc.getId());
-                        productList.add(p);
+                        fullProductList.add(p);
                     }
+
+                    // initially show all
+                    productList.addAll(fullProductList);
                     adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Failed to load products: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void filterProducts(String query) {
+        String q = query.trim().toLowerCase();
+        productList.clear();
+
+        if (q.isEmpty()) {
+            // show all
+            productList.addAll(fullProductList);
+        } else {
+            for (Product p : fullProductList) {
+                String title = p.getTitle() != null ? p.getTitle().toLowerCase() : "";
+                String category = p.getCategory() != null ? p.getCategory().toLowerCase() : "";
+                String desc = p.getDescription() != null ? p.getDescription().toLowerCase() : "";
+
+                if (title.contains(q) || category.contains(q) || desc.contains(q)) {
+                    productList.add(p);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -53,6 +53,11 @@ public class UserProfileActivity extends AppCompatActivity {
         btnBacktoMainPage.setOnClickListener(v ->
                 startActivity(new Intent(UserProfileActivity.this, UserHomePageActivity.class)));
 
+        btnOrders.setOnClickListener(v ->
+                startActivity(new Intent(UserProfileActivity.this, UserOrderHistoryActivity.class)));
+
+
+
         // Orders button can later open user order-history activity
 
         btnLogout.setOnClickListener(v -> {

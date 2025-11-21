@@ -45,6 +45,29 @@ public class AdminLoginActivity extends AppCompatActivity {
         tvGoSignUp.setOnClickListener(v -> {
             startActivity(new Intent(AdminLoginActivity.this, SignUpActivity.class));
         });
+
+        TextView tvForgot = findViewById(R.id.tvAdminForgotPassword);
+
+        tvForgot.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+
+            if (TextUtils.isEmpty(email)) {
+                etEmail.setError("Enter your admin email first");
+                etEmail.requestFocus();
+                return;
+            }
+
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnSuccessListener(aVoid ->
+                            Toast.makeText(AdminLoginActivity.this,
+                                    "Reset email sent",
+                                    Toast.LENGTH_LONG).show())
+                    .addOnFailureListener(e ->
+                            Toast.makeText(AdminLoginActivity.this,
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show());
+        });
+
     }
 
     private void loginAdmin() {

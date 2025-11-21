@@ -64,56 +64,7 @@
         android:layout_marginTop="10dp"
         android:scrollbars="none">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btnFood"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Food"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#00BCD4"
-                android:textColor="@color/white"/>
-
-            <Button
-                android:id="@+id/btnToy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Toy"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#00BCD4"
-                android:textColor="@color/white"/>
-
-            <Button
-                android:id="@+id/btnGrooming"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Grooming"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#00BCD4"
-                android:textColor="@color/white"/>
-
-            <Button
-                android:id="@+id/btn_litter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#00BCD4"
-                android:text="Litter"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/btn_health"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Health"
-                android:backgroundTint="#00BCD4"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
     </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView

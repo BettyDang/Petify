@@ -9,7 +9,7 @@
 
     <!-- Order ID -->
     <TextView
-        android:id="@+id/tvOrderId"
+        android:id="@+id/tvUserOrderId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Order #123456"
@@ -17,28 +17,19 @@
         android:textSize="16sp"
         android:textColor="#111111" />
 
-    <!-- Customer name + email -->
+    <!-- Total + Status -->
     <TextView
-        android:id="@+id/tvOrderMeta"
+        android:id="@+id/tvUserOrderAmountStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="John Doe • john@gmail.com"
-        android:textSize="15sp"
-        android:textColor="#222222" />
-
-    <!-- Total -->
-    <TextView
-        android:id="@+id/tvOrderAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total: $45.90"
+        android:text="Total: $45.90 • Status: Paid"
         android:textSize="14sp"
         android:textColor="#444444"
         android:layout_marginTop="4dp" />
 
     <!-- Address line -->
     <TextView
-        android:id="@+id/tvOrderAddressLine"
+        android:id="@+id/tvUserOrderAddressLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1234 Example St, Apt 5"
@@ -48,22 +39,12 @@
 
     <!-- Postal + city + country -->
     <TextView
-        android:id="@+id/tvOrderAddressMeta"
+        android:id="@+id/tvUserOrderAddressMeta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="H3B 1X1, Montreal, Canada"
         android:textSize="13sp"
         android:textColor="#777777" />
-
-    <!-- Status -->
-    <TextView
-        android:id="@+id/tvOrderStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status: Paid"
-        android:textSize="14sp"
-        android:textColor="#5B6CFF"
-        android:layout_marginTop="4dp" />
 
     <View
         android:layout_width="match_parent"

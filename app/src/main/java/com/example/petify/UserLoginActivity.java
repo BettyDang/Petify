@@ -45,6 +45,28 @@ public class UserLoginActivity extends AppCompatActivity {
         tvGoSignUp.setOnClickListener(v -> {
             startActivity(new Intent(UserLoginActivity.this, SignUpActivity.class));
         });
+        TextView tvForgot = findViewById(R.id.tvUserForgotPassword);
+
+        tvForgot.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+
+            if (TextUtils.isEmpty(email)) {
+                etEmail.setError("Enter your email first");
+                etEmail.requestFocus();
+                return;
+            }
+
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnSuccessListener(aVoid ->
+                            Toast.makeText(UserLoginActivity.this,
+                                    "Reset link sent to your email",
+                                    Toast.LENGTH_LONG).show())
+                    .addOnFailureListener(e ->
+                            Toast.makeText(UserLoginActivity.this,
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show());
+        });
+
     }
 
     private void loginUser() {

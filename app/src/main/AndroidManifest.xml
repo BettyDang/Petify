@@ -74,9 +74,9 @@
             android:name=".ShoppingCartActivity"
             android:exported="false" />
 
-<!--        <activity-->
-<!--            android:name=".UserOrderHistoryActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".UserOrderHistoryActivity"
+            android:exported="false" />
 
 <!--        <activity-->
 <!--            android:name=".UserPaymentHistoryActivity"-->
@@ -100,6 +100,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".UserProductDetailActivity"
+            android:exported="false" />
+
 
         <!-- SPLASH = FIRST SCREEN -->
         <activity
