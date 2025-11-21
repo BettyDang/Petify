@@ -10,43 +10,63 @@
     <!-- Order ID -->
     <TextView
         android:id="@+id/tvOrderId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Order #123456"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:textColor="#111111"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textColor="#111111" />
 
+    <!-- Customer name + email -->
     <TextView
         android:id="@+id/tvOrderMeta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="John Doe • john@gmail.com"
         android:textSize="15sp"
-        android:textColor="#222222"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textColor="#222222" />
 
+    <!-- Total -->
     <TextView
         android:id="@+id/tvOrderAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Total: $45.90"
         android:textSize="14sp"
         android:textColor="#444444"
-        android:layout_marginTop="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="4dp" />
 
+    <!-- Address line -->
+    <TextView
+        android:id="@+id/tvOrderAddressLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1234 Example St, Apt 5"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="6dp" />
+
+    <!-- Postal + city + country -->
+    <TextView
+        android:id="@+id/tvOrderAddressMeta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="H3B 1X1, Montreal, Canada"
+        android:textSize="13sp"
+        android:textColor="#777777" />
+
+    <!-- Status -->
     <TextView
         android:id="@+id/tvOrderStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Status: Paid"
         android:textSize="14sp"
         android:textColor="#5B6CFF"
-        android:layout_marginTop="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
+        android:layout_marginTop="4dp" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"/>
-
+        android:layout_height="10dp" />
 
 </LinearLayout>
