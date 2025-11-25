@@ -46,22 +46,32 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartAdapt
         adapter = new CartAdapter(this, cartItems, this);
         recyclerView.setAdapter(adapter);
 
-        btnContinueShopping.setOnClickListener(v -> {
+        // initially disable checkout (will be enabled after loadCart if there are items)
+        btnPayment.setEnabled(false);
 
-            finish();
-        });
+        btnContinueShopping.setOnClickListener(v -> finish());
 
         btnPayment.setOnClickListener(v -> {
+            // extra safety: block if cart is empty
+            if (cartItems.isEmpty()) {
+                Toast.makeText(this, "Your cart is empty.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             double total = 0;
             for (CartItem item : cartItems) {
                 total += item.getPrice() * item.getQuantity();
+            }
+
+            if (total <= 0) {
+                Toast.makeText(this, "Your cart total must be greater than $0.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             Intent intent = new Intent(ShoppingCartActivity.this, UserPaymentActivity.class);
             intent.putExtra("totalAmount", total); // in dollars
             startActivity(intent);
         });
-
     }
 
     @Override
@@ -101,6 +111,10 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartAdapt
             total += item.getPrice() * item.getQuantity();
         }
         cartTotal.setText(String.format("$%.2f", total));
+
+        // enable checkout only if there is at least one item and total > 0
+        boolean canCheckout = !cartItems.isEmpty() && total > 0;
+        btnPayment.setEnabled(canCheckout);
     }
 
     @Override

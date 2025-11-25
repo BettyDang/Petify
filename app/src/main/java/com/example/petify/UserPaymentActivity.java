@@ -3,6 +3,7 @@ package com.example.petify;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,21 +34,23 @@ public class UserPaymentActivity extends AppCompatActivity {
     private Button paymentButton;
     private TextView tvAmount;
 
+    private EditText etAddressLine, etPostalCode, etCity, etCountry;
+
     // Stripe test keys
-    private String PublishableKey = "xx";
-    private String SecretKey = "xx";
+    private final String PublishableKey =
+            "xxx";
+    private final String SecretKey =
+            "xxx";
 
+    private static final String CustomersURL    = "https://api.stripe.com/v1/customers";
+    private static final String EphemeralKeyURL = "https://api.stripe.com/v1/ephemeral_keys";
+    private static final String ClientSecretURL = "https://api.stripe.com/v1/payment_intents";
 
-    private final String CustomersURL    = "https://api.stripe.com/v1/customers";
-    private final String EphemeralKeyURL = "https://api.stripe.com/v1/ephemeral_keys";
-    private final String ClientSecretURL = "https://api.stripe.com/v1/payment_intents";
-
-    private String CustomerId = null;
+    private String CustomerId  = null;
     private String EphemeralKey;
     private String ClientSecret;
 
     private PaymentSheet paymentSheet;
-
 
     private String Amount;
     private final String Currency = "usd";
@@ -55,41 +58,120 @@ public class UserPaymentActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
+    private double totalAmount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_payment);
 
-        paymentButton = findViewById(R.id.payment);
-        tvAmount      = findViewById(R.id.tvAmount);
+        paymentButton   = findViewById(R.id.payment);
+        tvAmount        = findViewById(R.id.tvAmount);
+
+        etAddressLine   = findViewById(R.id.etAddressLine);
+        etPostalCode    = findViewById(R.id.etPostalCode);
+        etCity          = findViewById(R.id.etCity);
+        etCountry       = findViewById(R.id.etCountry);
 
         auth = FirebaseAuth.getInstance();
         db   = FirebaseFirestore.getInstance();
 
-
-        double total = getIntent().getDoubleExtra("totalAmount", 0.0);
-        tvAmount.setText(String.format("Total: $%.2f", total));
-
-        long amountInCents = Math.round(total * 100);
-        Amount = String.valueOf(amountInCents);
-
+        totalAmount = getIntent().getDoubleExtra("totalAmount", 0.0);
+        tvAmount.setText(String.format("Total: $%.2f", totalAmount));
+        Amount = String.valueOf(Math.round(totalAmount * 100));   // dollars → cents
 
         PaymentConfiguration.init(this, PublishableKey);
         paymentSheet = new PaymentSheet(this, this::onPaymentResult);
 
-        paymentButton.setOnClickListener(v -> {
-            if (CustomerId != null && !CustomerId.isEmpty()) {
-                paymentFlow();
-            } else {
-                Toast.makeText(this, "Stripe customer not ready yet", Toast.LENGTH_SHORT).show();
-            }
-        });
+        loadUserAddress();
 
+        paymentButton.setOnClickListener(v -> {
+            if (totalAmount <= 0) {
+                Toast.makeText(this, "Your cart is empty.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!validateAddressFields()) return;
+
+
+            saveAddressToProfile(() -> {
+                if (CustomerId != null && !CustomerId.isEmpty()) {
+                    paymentFlow();
+                } else {
+                    Toast.makeText(this,
+                            "Stripe customer not ready yet. Please wait a moment.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
 
         createCustomer();
     }
 
+
+    private void loadUserAddress() {
+        if (auth.getCurrentUser() == null) return;
+        String uid = auth.getCurrentUser().getUid();
+
+        db.collection("users").document(uid)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    UserProfile p = doc.toObject(UserProfile.class);
+                    if (p != null) {
+                        if (p.getAddressLine() != null)
+                            etAddressLine.setText(p.getAddressLine());
+                        if (p.getPostalCode() != null)
+                            etPostalCode.setText(p.getPostalCode());
+                        if (p.getCity() != null)
+                            etCity.setText(p.getCity());
+                        if (p.getCountry() != null)
+                            etCountry.setText(p.getCountry());
+                    }
+                });
+    }
+
+    private boolean validateAddressFields() {
+        if (etAddressLine.getText().toString().trim().isEmpty()) {
+            etAddressLine.setError("Required");
+            etAddressLine.requestFocus();
+            return false;
+        }
+        if (etPostalCode.getText().toString().trim().isEmpty()) {
+            etPostalCode.setError("Required");
+            etPostalCode.requestFocus();
+            return false;
+        }
+        if (etCity.getText().toString().trim().isEmpty()) {
+            etCity.setError("Required");
+            etCity.requestFocus();
+            return false;
+        }
+        if (etCountry.getText().toString().trim().isEmpty()) {
+            etCountry.setError("Required");
+            etCountry.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void saveAddressToProfile(Runnable onSaved) {
+        if (auth.getCurrentUser() == null) return;
+        String uid = auth.getCurrentUser().getUid();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("addressLine", etAddressLine.getText().toString().trim());
+        data.put("postalCode", etPostalCode.getText().toString().trim());
+        data.put("city",       etCity.getText().toString().trim());
+        data.put("country",    etCountry.getText().toString().trim());
+
+        db.collection("users").document(uid)
+                .update(data)
+                .addOnSuccessListener(unused -> onSaved.run())
+                .addOnFailureListener(e ->
+                        Toast.makeText(this,
+                                "Failed to save address: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show());
+    }
 
 
     private void createCustomer() {
@@ -236,6 +318,7 @@ public class UserPaymentActivity extends AppCompatActivity {
     }
 
 
+
     private void saveOrderAndClearCart() {
         if (auth.getCurrentUser() == null) {
             finish();
@@ -244,70 +327,41 @@ public class UserPaymentActivity extends AppCompatActivity {
 
         String uid   = auth.getCurrentUser().getUid();
         String email = auth.getCurrentUser().getEmail();
-        double total = getIntent().getDoubleExtra("totalAmount", 0.0);
         long now     = System.currentTimeMillis();
 
+        Map<String, Object> orderData = new HashMap<>();
+        orderData.put("userId", uid);
+        orderData.put("userEmail", email);
+        orderData.put("totalAmount", totalAmount);
+        orderData.put("status", "paid");
+        orderData.put("createdAt", now);
 
-        db.collection("users").document(uid).get()
-                .addOnSuccessListener(doc -> {
-                    UserProfile profile = doc.toObject(UserProfile.class);
+        orderData.put("shippingAddressLine", etAddressLine.getText().toString().trim());
+        orderData.put("shippingPostalCode",  etPostalCode.getText().toString().trim());
+        orderData.put("shippingCity",        etCity.getText().toString().trim());
+        orderData.put("shippingCountry",     etCountry.getText().toString().trim());
 
-                    String name    = profile != null && profile.getName() != null
-                            ? profile.getName() : "";
-                    String line    = profile != null ? profile.getAddressLine()   : null;
-                    String pc      = profile != null ? profile.getPostalCode()    : null;
-                    String city    = profile != null ? profile.getCity()          : null;
-                    String country = profile != null ? profile.getCountry()       : null;
+        db.collection("orders")
+                .add(orderData)
+                .addOnSuccessListener(orderRef -> {
 
+                    Map<String, Object> paymentData = new HashMap<>();
+                    paymentData.put("orderId",   orderRef.getId());
+                    paymentData.put("userId",    uid);
+                    paymentData.put("userEmail", email);
+                    paymentData.put("amount",    totalAmount);
+                    paymentData.put("status",    "completed");
+                    paymentData.put("method",    "stripe");
+                    paymentData.put("createdAt", now);
 
-                    Map<String, Object> orderData = new HashMap<>();
-                    orderData.put("userId", uid);
-                    orderData.put("userName", name);
-                    orderData.put("userEmail", email);
-                    orderData.put("totalAmount", total);
-                    orderData.put("status", "paid");
-                    orderData.put("createdAt", now);
-
-                    orderData.put("shippingAddressLine", line);
-                    orderData.put("shippingPostalCode", pc);
-                    orderData.put("shippingCity", city);
-                    orderData.put("shippingCountry", country);
-
-                    db.collection("orders")
-                            .add(orderData)
-                            .addOnSuccessListener(orderRef -> {
-
-                                Map<String, Object> paymentData = new HashMap<>();
-                                paymentData.put("orderId", orderRef.getId());
-                                paymentData.put("userId", uid);
-                                paymentData.put("userName", name);
-                                paymentData.put("userEmail", email);
-                                paymentData.put("amount", total);
-                                paymentData.put("status", "completed");
-                                paymentData.put("method", "stripe");
-                                paymentData.put("createdAt", now);
-
-                                db.collection("payments")
-                                        .add(paymentData)
-                                        .addOnSuccessListener(paymentRef -> {
-
-                                            clearCart(uid);
-                                        })
-                                        .addOnFailureListener(e -> {
-
-                                            clearCart(uid);
-                                        });
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(this,
-                                        "Failed to save order: " + e.getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                                finish();
-                            });
+                    db.collection("payments")
+                            .add(paymentData)
+                            .addOnSuccessListener(ref -> clearCart(uid))
+                            .addOnFailureListener(e -> clearCart(uid));
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this,
-                            "Failed to load profile: " + e.getMessage(),
+                            "Failed to save order: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                     finish();
                 });
