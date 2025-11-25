@@ -17,25 +17,26 @@ It includes **Stripe API integration** for real online payment processing.
 
 # 📸 Screenshots
 
-*(Placeholders, will be added)*
+### 🏠 Home Screen
 
-```
-[ Home Screen ]
-[ Product Detail ]
-[ Favorites List ]
-[ Shopping Cart ]
-[ Admin Dashboard ]
-```
+![](/Demo/Home.png)
 
----
+### 🛒 Shopping Cart
 
-# 🎥 Video Demo
+![](/Demo/Cart.png)
 
-*(Placeholder, will be added)*
+### 🐶 Product Detail
 
-```
-[ Demo video preview ]
-```
+![](/Demo/Product.png)
+
+### 👤 User Profile
+
+![](/Demo/Profile.png)
+
+### 🛠 Admin Dashboard
+
+![](/Demo/adminDashboard.png)
+
 
 ---
 
@@ -46,7 +47,7 @@ Petify includes **two synchronized environments** powered by Firestore:
 | Panel                 | Capabilities                                                                                 |
 | --------------------- | -------------------------------------------------------------------------------------------- |
 | 👤 **User Panel**     | Browse products, search, add to cart, manage favorites, view product details, manage profile |
-| 🧑‍💼 **Admin Panel** | Add/edit/delete products, upload product images, view user orders, manage payments           |
+| 🧑‍💼 **Admin Panel**   | Add/edit/delete products, upload product images, view user orders, manage payments           |
 
 Both panels communicate with:
 
@@ -80,7 +81,7 @@ Both panels communicate with:
 
 | API                      | Purpose                                                                                 |
 | ------------------------ | --------------------------------------------------------------------------------------- |
-| **Stripe API ** | Secure online payment processing (credit cards and debit cards payment intents) |
+| **Stripe API** | Secure online payment processing (credit cards and debit cards payment intents) |
 
 Stripe will handle:
 
